@@ -10,7 +10,7 @@ import (
 
 var DB *gorm.DB
 
-func NewDB(params ...string) *gorm.DB {
+func ConnectDB(params ...string) *gorm.DB {
 	var err error
 	conString := config.GetPostgresConnectionString()
 

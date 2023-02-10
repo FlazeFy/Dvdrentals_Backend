@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	database.NewDB()
+	database.ConnectDB()
 
 	e := routes.Init()
 
