@@ -1,5 +1,11 @@
 package model
 
+import (
+	"dvdrentals_backend/database"
+	"net/http"
+	"strconv"
+)
+
 type (
 	Staff struct {
 		StaffId    int32  `json:"staff_id"`
@@ -21,3 +27,20 @@ type (
 		TotalCustomer    int16   `json:"total_customer"`
 	}
 )
+
+func GetAllStaff() (Response, error) {
+	var res Response
+	db := database.GetDBInstance()
+
+	staff := []Staff{}
+
+	if err := db.Find(&staff).Error; err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(staff)) + " data"
+	res.Data = staff
+
+	return res, nil
+}

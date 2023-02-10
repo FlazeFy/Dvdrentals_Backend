@@ -1,5 +1,11 @@
 package model
 
+import (
+	"dvdrentals_backend/database"
+	"net/http"
+	"strconv"
+)
+
 type (
 	Payment struct {
 		PaymentId   int32   `json:"payment_id"`
@@ -14,3 +20,20 @@ type (
 		TotalTransaction string `json:"total_transaction"`
 	}
 )
+
+func GetAllPayment() (Response, error) {
+	var res Response
+	db := database.GetDBInstance()
+
+	payment := []Payment{}
+
+	if err := db.Find(&payment).Error; err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(payment)) + " data"
+	res.Data = payment
+
+	return res, nil
+}

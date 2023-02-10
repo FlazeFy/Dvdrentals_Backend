@@ -1,5 +1,11 @@
 package model
 
+import (
+	"dvdrentals_backend/database"
+	"net/http"
+	"strconv"
+)
+
 type (
 	Film struct {
 		FilmId          string  `json:"film_id"`
@@ -9,7 +15,7 @@ type (
 		LanguageId      int16   `json:"language_id"`
 		RentalDuration  int8    `json:"rental_duration"`
 		RentalRate      float32 `json:"rental_rate"`
-		Length          int8    `json:"length"`
+		Length          int32   `json:"length"`
 		ReplacementCost float32 `json:"replacement_cost"`
 		Rating          string  `json:"rating"`
 		LastUpdate      string  `json:"last_update"`
@@ -35,3 +41,20 @@ type (
 		AverageDuration float32 `json:"average_duration"`
 	}
 )
+
+func GetAllFilm() (Response, error) {
+	var res Response
+	db := database.GetDBInstance()
+
+	film := []Film{}
+
+	if err := db.Find(&film).Error; err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(film)) + " data"
+	res.Data = film
+
+	return res, nil
+}
