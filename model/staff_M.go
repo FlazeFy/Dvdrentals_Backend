@@ -44,3 +44,43 @@ func GetAllStaff() (Response, error) {
 
 	return res, nil
 }
+
+func GetStaffPerformance() (Response, error) {
+	var res Response
+	var obj StaffPerformance
+	var arrobj []StaffPerformance
+
+	db := database.GetDBInstance()
+
+	rows, err := db.Raw("select coalesce (s.first_name , '') || ' ' || coalesce (s.last_name , '') as full_name, " +
+		"cast(sum(p.amount) as decimal(10,2)) as total_received, cast(avg(p.amount) as decimal(10,2)) as average_received, " +
+		"count(1) as total_transaction, count(distinct p.customer_id) as total_customer from staffs s " +
+		"join payments p on p.staff_id = s.staff_id group by s.staff_id order by 2 desc").Rows()
+
+	if err != nil {
+		return res, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(
+			&obj.Fullname,
+			&obj.TotalReceived,
+			&obj.AverageReceived,
+			&obj.TotalTransaction,
+			&obj.TotalCustomer)
+
+		if err != nil {
+			return res, err
+		}
+
+		arrobj = append(arrobj, obj)
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(arrobj)) + " data"
+	res.Data = arrobj
+
+	return res, nil
+}

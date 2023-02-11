@@ -16,3 +16,12 @@ func GetAllStaff(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func GetStaffPerformance(c echo.Context) error {
+	result, err := model.GetStaffPerformance()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"map": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
