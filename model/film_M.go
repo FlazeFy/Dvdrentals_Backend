@@ -66,7 +66,7 @@ func GetFilmWMostActor() (Response, error) {
 
 	db := database.GetDBInstance()
 
-	rows, err := db.Raw("select f.title, f.description, count(1) as total from films f join film_actor fa on fa.film_id = f.film_id group by f.film_id order by 3 desc limit 7").Rows()
+	rows, err := db.Raw("select f.title, f.description, count(1) as total from films f join film_actors fa on fa.film_id = f.film_id group by f.film_id order by 3 desc limit 7").Rows()
 	if err != nil {
 		return res, err
 	}
@@ -110,6 +110,71 @@ func GetTotalFilmByRating() (Response, error) {
 		err = rows.Scan(
 			&obj.Rating,
 			&obj.Total)
+
+		if err != nil {
+			return res, err
+		}
+
+		arrobj = append(arrobj, obj)
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(arrobj)) + " data"
+	res.Data = arrobj
+
+	return res, nil
+}
+
+func GetTotalFilmByCat() (Response, error) {
+	var res Response
+	var obj TotalFilmWCat
+	var arrobj []TotalFilmWCat
+
+	db := database.GetDBInstance()
+
+	rows, err := db.Raw("select c.name, count(1) as total from categorys c join film_categorys " +
+		"fc on c.category_id = fc.category_id group by c.category_id order by 2 desc").Rows()
+	if err != nil {
+		return res, err
+	}
+
+	for rows.Next() {
+		err = rows.Scan(
+			&obj.Name,
+			&obj.Total)
+
+		if err != nil {
+			return res, err
+		}
+
+		arrobj = append(arrobj, obj)
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(arrobj)) + " data"
+	res.Data = arrobj
+
+	return res, nil
+}
+
+func GetAverageFilmDurationByCat() (Response, error) {
+	var res Response
+	var obj AverageFilmDuration
+	var arrobj []AverageFilmDuration
+
+	db := database.GetDBInstance()
+
+	rows, err := db.Raw("select c.name, count(1) as total, cast(avg(f.length) as decimal(10,2)) as average_duration " +
+		" from categorys c join film_categorys fc on c.category_id = fc.category_id join films f on f.film_id = fc.film_id group by c.category_id order by 3 desc").Rows()
+	if err != nil {
+		return res, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(
+			&obj.Name,
+			&obj.Total,
+			&obj.AverageDuration)
 
 		if err != nil {
 			return res, err

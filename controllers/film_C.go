@@ -35,3 +35,23 @@ func GetTotalFilmByRating(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func GetTotalFilmByCat(c echo.Context) error {
+	result, err := model.GetTotalFilmByCat()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
+
+func GetAverageFilmDurationByCat(c echo.Context) error {
+	result, err := model.GetAverageFilmDurationByCat()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
