@@ -24,6 +24,8 @@ func Init() *echo.Echo {
 
 	//Film
 	e.GET("api/v1/film", controllers.GetAllFilm)
+	e.GET("api/v1/film/total/actor", controllers.GetFilmWMostActor)
+	e.GET("api/v1/film/total/rate", controllers.GetTotalFilmByRating)
 
 	//Payment
 	e.GET("api/v1/payment", controllers.GetAllPayment)
