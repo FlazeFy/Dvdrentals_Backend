@@ -16,3 +16,13 @@ func GetAllPayment(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func GetTotalTransactionByAmount(c echo.Context) error {
+	result, err := model.GetTotalTransactionByAmount()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}

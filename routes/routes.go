@@ -21,6 +21,7 @@ func Init() *echo.Echo {
 
 	//Staff
 	e.GET("api/v1/staff", controllers.GetAllStaff)
+	e.GET("api/v1/staff/performance", controllers.GetStaffPerformance)
 
 	//Film
 	e.GET("api/v1/film", controllers.GetAllFilm)
@@ -31,6 +32,7 @@ func Init() *echo.Echo {
 
 	//Payment
 	e.GET("api/v1/payment", controllers.GetAllPayment)
+	e.GET("api/v1/payment/total/amount", controllers.GetTotalTransactionByAmount)
 
 	return e
 }

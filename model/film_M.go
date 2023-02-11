@@ -138,6 +138,8 @@ func GetTotalFilmByCat() (Response, error) {
 		return res, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		err = rows.Scan(
 			&obj.Name,
@@ -169,6 +171,8 @@ func GetAverageFilmDurationByCat() (Response, error) {
 	if err != nil {
 		return res, err
 	}
+
+	defer rows.Close()
 
 	for rows.Next() {
 		err := rows.Scan(
