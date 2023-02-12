@@ -55,3 +55,13 @@ func GetAverageFilmDurationByCat(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func GetTotalAverageFilmReplacementCost(c echo.Context) error {
+	result, err := model.GetTotalAverageFilmReplacementCost()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
