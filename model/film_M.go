@@ -40,6 +40,11 @@ type (
 		Total           int16   `json:"total"`
 		AverageDuration float32 `json:"average_duration"`
 	}
+	TotalAverageFilmReplacementCost struct {
+		Criteria    string  `json:"criteria"`
+		Total       int16   `json:"total"`
+		AverageCost float32 `json:"average_cost"`
+	}
 )
 
 func GetAllFilm() (Response, error) {
@@ -179,6 +184,43 @@ func GetAverageFilmDurationByCat() (Response, error) {
 			&obj.Name,
 			&obj.Total,
 			&obj.AverageDuration)
+
+		if err != nil {
+			return res, err
+		}
+
+		arrobj = append(arrobj, obj)
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully collect " + strconv.Itoa(len(arrobj)) + " data"
+	res.Data = arrobj
+
+	return res, nil
+}
+
+func GetTotalAverageFilmReplacementCost() (Response, error) {
+	var res Response
+	var obj TotalAverageFilmReplacementCost
+	var arrobj []TotalAverageFilmReplacementCost
+
+	db := database.GetDBInstance()
+
+	rows, err := db.Raw("select case when f.replacement_cost < 16 then 'Cheap' when f.replacement_cost < 23 then 'Moderate' " +
+		"else 'Expensive' end as criteria, count(1) as total, cast(avg(f.replacement_cost) as decimal(10,2)) as average_cost " +
+		"from films f group by 1 order by 3").Rows()
+
+	if err != nil {
+		return res, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		err := rows.Scan(
+			&obj.Criteria,
+			&obj.Total,
+			&obj.AverageCost)
 
 		if err != nil {
 			return res, err

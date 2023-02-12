@@ -16,6 +16,11 @@ func Init() *echo.Echo {
 	})
 
 	//================== Handler ==================//
+
+	//Actor
+	e.GET("api/v1/actor/total/film/most", controllers.GetActorWMostFilm)
+	e.GET("api/v1/actor/total/film/category", controllers.GetTotalAverageActorFilmCategory)
+
 	//Customer
 	e.GET("api/v1/customer", controllers.GetAllCustomer)
 	e.GET("api/v1/customer/all/avgtotal", controllers.GetAllCustomerTotalAvgSpending)
@@ -31,6 +36,7 @@ func Init() *echo.Echo {
 	e.GET("api/v1/film/total/rate", controllers.GetTotalFilmByRating)
 	e.GET("api/v1/film/total/category", controllers.GetTotalFilmByCat)
 	e.GET("api/v1/film/duration/category", controllers.GetAverageFilmDurationByCat)
+	e.GET("api/v1/film/total/replacementcost", controllers.GetTotalAverageFilmReplacementCost)
 
 	//Payment
 	e.GET("api/v1/payment", controllers.GetAllPayment)
