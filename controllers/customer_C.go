@@ -17,3 +17,23 @@ func GetAllCustomer(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
+
+func GetAllCustomerTotalAvgSpending(c echo.Context) error {
+	result, err := model.GetAllCustomerTotalAvgSpending()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}
+
+func GetCountryWMostCustomer(c echo.Context) error {
+	result, err := model.GetCountryWMostCustomer()
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"msg": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, result)
+}

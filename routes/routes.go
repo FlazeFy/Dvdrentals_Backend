@@ -18,6 +18,8 @@ func Init() *echo.Echo {
 	//================== Handler ==================//
 	//Customer
 	e.GET("api/v1/customer", controllers.GetAllCustomer)
+	e.GET("api/v1/customer/all/avgtotal", controllers.GetAllCustomerTotalAvgSpending)
+	e.GET("api/v1/customer/country/most", controllers.GetCountryWMostCustomer)
 
 	//Staff
 	e.GET("api/v1/staff", controllers.GetAllStaff)
